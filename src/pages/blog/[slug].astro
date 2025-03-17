@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../components/layout/BaseLayout.astro";
+import { CATEGORIES } from "../../constants/site";
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection("blog");
@@ -21,15 +22,22 @@ const formatDate = (date: Date) => {
     day: "numeric",
   });
 };
+
+const categoryName = CATEGORIES.find(cat => cat.slug === post.data.category)?.name || post.data.category;
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article class="post">
     <header>
       <h1>{post.data.title}</h1>
-      <time datetime={post.data.publishedAt.toISOString()}>
-        {formatDate(post.data.publishedAt)}
-      </time>
+      <div class="meta">
+        <time datetime={post.data.publishedAt.toISOString()}>
+          {formatDate(post.data.publishedAt)}
+        </time>
+        <span class="category">
+          <a href={`/blog/category/${post.data.category}`}>{categoryName}</a>
+        </span>
+      </div>
     </header>
     <div class="content">
       <Content />
@@ -57,9 +65,25 @@ const formatDate = (date: Date) => {
     margin-bottom: 0.5rem;
   }
 
-  time {
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     color: var(--text-muted);
     font-size: var(--text-sm);
+  }
+
+  .category a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  .category a:hover {
+    text-decoration: underline;
+  }
+
+  time {
+    color: var(--text-muted);
   }
 
   .content {

@@ -2,7 +2,9 @@
 title: "DevContainers: The Art of Portable Development Environments"
 description: "Pack your dev environment in a box and take it anywhere"
 publishedAt: 2024-09-16
+category: "cloud"
 tags: ["devcontainers", "development-environment", "docker", "vscode", "productivity"]
+
 ---
 
 ## The Environment Enigma

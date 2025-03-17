@@ -1,34 +1,30 @@
 ---
 import { getCollection } from "astro:content";
-import BaseLayout from "../../components/layout/BaseLayout.astro";
-import BaseHero from "../../components/shared/BaseHero.astro";
-import ArticleCard from "../../components/ui/ArticleCard.astro";
-import Container from "../../components/ui/Container.astro";
-import ContentList from "../../components/shared/ContentList.astro";
-import { CATEGORIES } from "../../constants/site";
+import BaseLayout from "../../../components/layout/BaseLayout.astro";
+import BaseHero from "../../../components/shared/BaseHero.astro";
+import ArticleCard from "../../../components/ui/ArticleCard.astro";
+import Container from "../../../components/ui/Container.astro";
+import ContentList from "../../../components/shared/ContentList.astro";
+import { CATEGORIES } from "../../../constants/site";
 
-// 현재 URL 로깅
-console.log("Current URL:", Astro.url.toString());
-console.log("Current search params:", Object.fromEntries(Astro.url.searchParams.entries()));
+export async function getStaticPaths() {
+  return CATEGORIES.map(category => ({
+    params: { category: category.slug },
+    props: { category }
+  }));
+}
 
-const currentCategory = Astro.url.searchParams.get('category') || "all";
-console.log("Selected category:", currentCategory);
+const { category } = Astro.params;
 
 const posts = await getCollection("blog", ({ data }) => {
   return import.meta.env.PROD ? !data.draft : true;
 });
 
-console.log("Posts data:", posts.map(post => ({
-  title: post.data.title,
-  category: post.data.category,
-  type: typeof post.data.category
-})));
-
-const filteredPosts = currentCategory === "all" 
+const filteredPosts = category === "all" 
   ? posts 
   : posts.filter(post => {
       if (!post.data.category) return false;
-    return String(post.data.category) === String(currentCategory);
+      return String(post.data.category) === String(category);
     });
 
 const sortedPosts = filteredPosts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
@@ -39,9 +35,6 @@ const categoryCounts = CATEGORIES.map(cat => {
     : posts.filter(post => post.data.category && String(post.data.category) === cat.slug).length;
   return { ...cat, count };
 });
-
-console.log("Filtered posts:", filteredPosts.map(post => post.data.title));
-console.log("Category counts:", categoryCounts);
 ---
 
 <BaseLayout title="Blog" description="Read my latest blog posts">
@@ -52,9 +45,8 @@ console.log("Category counts:", categoryCounts);
       {
         categoryCounts.map((cat) => (
           <a 
-            href={`/blog?category=${cat.slug}`} 
-            class:list={[{ active: currentCategory === cat.slug }]}
-            data-astro-reload
+            href={cat.slug === "all" ? "/blog" : `/blog/category/${cat.slug}`}
+            class:list={[{ active: category === cat.slug }]}
           >
             {cat.name} ({cat.count})
           </a>
@@ -115,4 +107,4 @@ console.log("Category counts:", categoryCounts);
     color: var(--text-muted);
     padding: 2rem 0;
   }
-</style>
+</style> 

@@ -2,6 +2,7 @@
 title: "Async Generators in JavaScript: Taming the Data Flood"
 description: "A deep dive into using async generators for handling large data streams efficiently"
 publishedAt: 2024-09-15
+category: "network"
 tags: ["javascript", "async", "generators", "streams", "performance"]
 ---
 

@@ -3,8 +3,14 @@ export type NavigationItem = {
     path: string;
 };
 
+export type Category = {
+    name: string;
+    slug: string;
+    description?: string;
+};
+
 export const SITE = {
-    name: "Ha<inKim",
+    name: "HaminKim",
     title: "Software Engineer ",
     description: "Personal portfolio and blog",
     url: "https://mingu-blog.vercel.app/",
@@ -36,4 +42,11 @@ export const META = {
     twitter: {
         cardType: "summary_large_image",
     }
-} as const; 
+    
+} as const;
+
+export const CATEGORIES: Category[] = [
+    { name: "All", slug: "all"},
+    { name: "네트워크", slug: "network"},
+    { name: "클라우드", slug: "cloud"},
+] as const;
