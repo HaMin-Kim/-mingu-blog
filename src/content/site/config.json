@@ -1,8 +1,8 @@
 {
   "home": {
-    "name": "ByteKai",
-    "title": "Software Engineer & Curious Tinkerer",
-    "introduction": "I’m constantly learning and evolving. I love diving into new ideas and finding creative ways to solve problems.",
+    "name": "김하민",
+    "title": "백엔드 개발자",
+    "introduction": "이런저런소개소개소개소개",
     "sections": {
       "blog": {
         "title": "Writing",
@@ -20,11 +20,11 @@
     "socialLinks": [
       {
         "platform": "GitHub",
-        "url": "https://github.com/bytekai"
+        "url": "https://github.com/HaMin-Kim"
       },
       {
-        "platform": "Twitter",
-        "url": "https://x.com/byteekai"
+        "platform": "Linkedin",
+        "url": "https://www.linkedin.com/in/%ED%95%98%EB%AF%BC-%EA%B9%80-85aa66246/"
       }
     ]
   }
