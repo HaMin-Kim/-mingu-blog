@@ -7,23 +7,11 @@ import Container from "../../components/ui/Container.astro";
 import ContentList from "../../components/shared/ContentList.astro";
 import { CATEGORIES } from "../../constants/site";
 
-// 현재 URL 로깅
-console.log("Current URL:", Astro.url.toString());
-console.log("Current search params:", Object.fromEntries(Astro.url.searchParams.entries()));
-
 const currentCategory = Astro.url.searchParams.get('category') || "all";
-console.log("Selected category:", currentCategory);
 
 const posts = await getCollection("blog", ({ data }) => {
   return import.meta.env.PROD ? !data.draft : true;
 });
-
-console.log("Posts data:", posts.map(post => ({
-  title: post.data.title,
-  category: post.data.category,
-  type: typeof post.data.category
-})));
-
 const filteredPosts = currentCategory === "all" 
   ? posts 
   : posts.filter(post => {
@@ -40,8 +28,7 @@ const categoryCounts = CATEGORIES.map(cat => {
   return { ...cat, count };
 });
 
-console.log("Filtered posts:", filteredPosts.map(post => post.data.title));
-console.log("Category counts:", categoryCounts);
+const isHomeBlog = Astro.url.pathname === "/blog" || Astro.url.pathname === "/blog/";
 ---
 
 <BaseLayout title="Blog" description="Read my latest blog posts">
@@ -52,9 +39,8 @@ console.log("Category counts:", categoryCounts);
       {
         categoryCounts.map((cat) => (
           <a 
-            href={`/blog?category=${cat.slug}`} 
-            class:list={[{ active: currentCategory === cat.slug }]}
-            data-astro-reload
+            href={cat.slug === "all" ? "/blog" : `/blog/category/${cat.slug}`}
+            class:list={[{ active: cat.slug === "all" && isHomeBlog }]}
           >
             {cat.name} ({cat.count})
           </a>
